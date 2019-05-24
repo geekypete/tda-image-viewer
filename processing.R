@@ -15,6 +15,7 @@ files_with_path <- paste(image_path, files, sep = "")
 
 num_cores <- detectCores()
 cl <- makeCluster(num_cores)
+
 registerDoParallel(cl)
 
 persistence_diagrams <- foreach(i=files, .packages=c('TDA', 'png')) %dopar%{
@@ -22,8 +23,14 @@ persistence_diagrams <- foreach(i=files, .packages=c('TDA', 'png')) %dopar%{
     img_mat <- readPNG(img_path) 
     # Luminance preserving grayscale conversion
     img_mat <- 0.2126*img_mat[,,1] + 0.7152*img_mat[,,2] + 0.0722*img_mat[,,3]
+    Xlim <- c(0, nrow(img_mat)-1)
+    Ylim <- c(0, ncol(img_mat)-1)
+    lim <- cbind(Xlim, Ylim)
+    by <- 1 
     # Generate persistence diagram
-    tmp_diag <- gridDiag(FUNvalues=img_mat , sublevel=TRUE, 
+    tmp_diag <- gridDiag(FUNvalues=img_mat , lim=lim, by=by, sublevel=TRUE, 
                           library="Dionysus", printProgress=FALSE, location=TRUE)
     list(i, tmp_diag)
 }
+
+stopCluster(cl)
