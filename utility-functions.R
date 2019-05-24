@@ -14,14 +14,25 @@ use_package <- function(p) {
 #' @param perst list in the form list(persistenceDiagram, nucleiXYcoordinates)
 #' @export
 perstImage <- function(file, diagram, min, max, betti){
-    library(png)
-    library(abind)
     img<-readPNG(file)
-    str(img)
     plot(NULL, type='n', ann=FALSE, main="Persistence", xlab="x", ylab="y",xlim =range(0:dim(img)[2]),ylim = rev(range(dim(img)[1]:0)),yaxs="i",xaxs="i")
 
     #plot(NULL, type='n', ann=FALSE, main="Persistence", xlab="x", ylab="y",xlim =range(0:dim(img)[2]),ylim = range(0:dim(img)[1]),yaxs="i",xaxs="i")
     rasterImage(img, 0, dim(img)[1], dim(img)[2], 0)
+    cycl <- getCycles(diagram, min, max, betti=betti)
+    points(cycl[[2]],cycl[[1]], col=2)
+}
+
+#' plots Betti 1 Cycles and nuclei position over original image
+#' @param file filename and path to .png image to overlay cycles on
+#' @param perst list in the form list(persistenceDiagram, nucleiXYcoordinates)
+#' @export
+perstGrayImage <- function(file, diagram, min, max, betti){
+    img <- grayscale(load.image(file))
+    img <- as.cimg(threshold(img, min))
+    plot(NULL, type='n', ann=FALSE, main="Persistence", xlab="x", ylab="y",xlim =range(0:dim(img)[1]),ylim = rev(range(dim(img)[2]:0)),yaxs="i",xaxs="i")
+
+    rasterImage(img, 0, dim(img)[2], dim(img)[1], 0)
     cycl <- getCycles(diagram, min, max, betti=betti)
     points(cycl[[2]],cycl[[1]], col=2)
 }
