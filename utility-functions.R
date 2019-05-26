@@ -13,29 +13,25 @@ use_package <- function(p) {
 #' @param file filename and path to .png image to overlay cycles on
 #' @param perst list in the form list(persistenceDiagram, nucleiXYcoordinates)
 #' @export
-perstImage <- function(file, diagram, min, max, betti){
-    img<-readPNG(file)
-    plot(NULL, type='n', ann=FALSE, main="Persistence", xlab="x", ylab="y",xlim =range(0:dim(img)[2]),ylim = rev(range(dim(img)[1]:0)),yaxs="i",xaxs="i")
-
-    #plot(NULL, type='n', ann=FALSE, main="Persistence", xlab="x", ylab="y",xlim =range(0:dim(img)[2]),ylim = range(0:dim(img)[1]),yaxs="i",xaxs="i")
-    rasterImage(img, 0, dim(img)[1], dim(img)[2], 0)
-    cycl <- getCycles(diagram, min, max, betti=betti)
-    points(cycl[[2]],cycl[[1]], col=2)
+perstImage <- function(file, diagram, min, max, betti, image="color", generators=TRUE){
+    if(image=="color")
+        {
+          img<-readPNG(file)
+          plot(NULL, type='n', ann=FALSE, main="Persistence", xlab="x", ylab="y",xlim =range(0:dim(img)[2]),ylim = rev(range(dim(img)[1]:0)),yaxs="i",xaxs="i")
+        rasterImage(img, 0, dim(img)[1], dim(img)[2], 0)
 }
 
-#' plots Betti 1 Cycles and nuclei position over original image
-#' @param file filename and path to .png image to overlay cycles on
-#' @param perst list in the form list(persistenceDiagram, nucleiXYcoordinates)
-#' @export
-perstGrayImage <- function(file, diagram, min, max, betti){
-    img <- grayscale(load.image(file))
-    img <- as.cimg(threshold(img, min))
-    plot(NULL, type='n', ann=FALSE, main="Persistence", xlab="x", ylab="y",xlim =range(0:dim(img)[1]),ylim = rev(range(dim(img)[2]:0)),yaxs="i",xaxs="i")
-
-    rasterImage(img, 0, dim(img)[2], dim(img)[1], 0)
+    if(image=="thresh")
+    {
+        img <- grayscale(load.image(file))
+        img <- as.cimg(threshold(img, (max+min)/2))
+        plot(NULL, type='n', ann=FALSE, main="Persistence", xlab="x", ylab="y",xlim =range(0:dim(img)[1]),ylim = rev(range(dim(img)[2]:0)),yaxs="i",xaxs="i")
+        rasterImage(img, 0, dim(img)[2], dim(img)[1], 0)
+    }
     cycl <- getCycles(diagram, min, max, betti=betti)
-    points(cycl[[2]],cycl[[1]], col=2)
+    points(cycl[[2]],cycl[[1]], col='chartreuse3', pch=19, cex=.25)
 }
+
 
 #' Retrieves the cycles for a given persistence diagram
 #' @param diag Persistence diagram to retrieve cycles from
@@ -54,3 +50,19 @@ getCycles<-function(diag, min, max, betti)
   }
     return(list(X,Y))
 }
+
+use_package('doParallel')
+use_package('foreach')
+use_package('stringr')
+use_package('TDA')
+use_package('reshape2')
+use_package('ggplot2')
+use_package('png')
+use_package('shiny')
+use_package('shinydashboard')
+use_package('plotly')
+use_package('imager')
+use_package('abind')
+image_path <- "./images/miccai-2015/"
+files <- list.files(image_path, pattern="\\.png$" )
+files_with_path <- paste(image_path, files, sep = "")
