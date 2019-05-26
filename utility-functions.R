@@ -13,15 +13,15 @@ use_package <- function(p) {
 #' @param file filename and path to .png image to overlay cycles on
 #' @param perst list in the form list(persistenceDiagram, nucleiXYcoordinates)
 #' @export
-perstImage <- function(file, diagram, min, max, betti, image="color", generators=TRUE){
-    if(image=="color")
+perstImage <- function(file, diagram, min, max, betti, image="Color", generators=TRUE){
+    if(image=="Color")
         {
           img<-readPNG(file)
           plot(NULL, type='n', ann=FALSE, main="Persistence", xlab="x", ylab="y",xlim =range(0:dim(img)[2]),ylim = rev(range(dim(img)[1]:0)),yaxs="i",xaxs="i")
         rasterImage(img, 0, dim(img)[1], dim(img)[2], 0)
 }
 
-    if(image=="thresh")
+    if(image=="Threshold")
     {
         img <- grayscale(load.image(file))
         img <- as.cimg(threshold(img, (max+min)/2))
