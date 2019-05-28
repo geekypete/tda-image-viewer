@@ -13,19 +13,23 @@ use_package <- function(p) {
 #' @param file filename and path to .png image to overlay cycles on
 #' @param perst list in the form list(persistenceDiagram, nucleiXYcoordinates)
 #' @export
-perstImage <- function(file, diagram, min, max, betti, image="Color", generators=TRUE){
+perstImage <- function(file, diagram, min, max, betti, image="Color", generators=TRUE, show_cycles=TRUE, show_bg=TRUE){
     if(image=="Color")
         {
           img<-readPNG(file)
           plot(NULL, type='n', ann=FALSE, main="Persistence", xlab="x", ylab="y",xlim =range(0:dim(img)[2]),ylim = rev(range(dim(img)[1]:0)),yaxs="i",xaxs="i")
-        rasterImage(img, 0, dim(img)[1], dim(img)[2], 0)
-}
+          if(show_bg){
+              rasterImage(img, 0, dim(img)[1], dim(img)[2], 0)
+          }
+        }
 
     if(image=="Grayscale")
-    {
+    { 
         img <- grayscale(load.image(file))
         plot(NULL, type='n', ann=FALSE, main="Persistence", xlab="x", ylab="y",xlim =range(0:dim(img)[1]),ylim = rev(range(dim(img)[2]:0)),yaxs="i",xaxs="i")
-        rasterImage(img, 0, dim(img)[2], dim(img)[1], 0)
+        if(show_bg){
+          rasterImage(img, 0, dim(img)[2], dim(img)[1], 0)
+        }
     }
 
     if(image=="Threshold")
@@ -33,10 +37,14 @@ perstImage <- function(file, diagram, min, max, betti, image="Color", generators
         img <- grayscale(load.image(file))
         img <- as.cimg(threshold(img, (max+min)/2))
         plot(NULL, type='n', ann=FALSE, main="Persistence", xlab="x", ylab="y",xlim =range(0:dim(img)[1]),ylim = rev(range(dim(img)[2]:0)),yaxs="i",xaxs="i")
-        rasterImage(img, 0, dim(img)[2], dim(img)[1], 0)
+        if(show_bg){
+            rasterImage(img, 0, dim(img)[2], dim(img)[1], 0)
+        }
     }
-    cycl <- getCycles(diagram, min, max, betti=betti)
-    points(cycl[[2]],cycl[[1]], col='chartreuse3', pch=19, cex=.25)
+    if(show_cycles){
+      cycl <- getCycles(diagram, min, max, betti=betti)
+      points(cycl[[2]],cycl[[1]], col='chartreuse3', pch=19, cex=.25)
+    }
 }
 
 
