@@ -21,6 +21,13 @@ perstImage <- function(file, diagram, min, max, betti, image="Color", generators
         rasterImage(img, 0, dim(img)[1], dim(img)[2], 0)
 }
 
+    if(image=="Grayscale")
+    {
+        img <- grayscale(load.image(file))
+        plot(NULL, type='n', ann=FALSE, main="Persistence", xlab="x", ylab="y",xlim =range(0:dim(img)[1]),ylim = rev(range(dim(img)[2]:0)),yaxs="i",xaxs="i")
+        rasterImage(img, 0, dim(img)[2], dim(img)[1], 0)
+    }
+
     if(image=="Threshold")
     {
         img <- grayscale(load.image(file))
