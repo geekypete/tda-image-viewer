@@ -34,14 +34,5 @@ persistence_diagrams <- foreach(i=files, .packages=c('TDA', 'png')) %dopar%{
     list(i, tmp_diag)
 }
 
-perstImage(paste(image_path, files[6], sep=''), persistence_diagrams[[6]][[2]], .1, 1, betti=0)
-
-cycles <-getCycles(persistence_diagrams[[3]][[2]], 0, 1)
 stopCluster(cl)
 
-i <- files[1]
-img_path <- paste(image_path, i, sep = "")
-img_mat <- readPNG(img_path) 
-# Luminance preserving grayscale conversion
-img_mat <- 0.2126*img_mat[,,1] + 0.7152*img_mat[,,2] + 0.0722*img_mat[,,3]
-img_gray <- grayscale(load.image(img_path))
