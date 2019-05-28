@@ -11,9 +11,10 @@ ui <- dashboardPage(
   selectInput("img_type", "Image Type", c("Color", "Grayscale", "Threshold"), width=200)),
   dashboardBody(
       fluidRow(
-          box(status = "primary", plotOutput("cycleA"), width = 700, height=700),
-          box(title = "Persistence",  status = "primary", plotOutput("perst"), width=700, height=700)
-
+          box(status = "primary", plotOutput("cycleA"), width=5, height=520)
+      ),
+      fluidRow(
+          box(title = "Persistence", status="primary", plotOutput("perst"), width=3, height=600)
       )
   ))
 
