@@ -30,7 +30,7 @@ persistence_diagrams <- foreach(i=files, .packages=c('TDA', 'png')) %dopar%{
     by <- 1 
     # Generate persistence diagram
     tmp_diag <- gridDiag(FUNvalues=img_mat , lim=lim, by=by, sublevel=TRUE, 
-                          library="Dionysus", printProgress=FALSE, location=TRUE)
+                         library="Dionysus", printProgress=FALSE, location=TRUE)
     list(i, tmp_diag)
 }
 
