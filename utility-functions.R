@@ -15,20 +15,20 @@ use_package <- function(p) {
 #' @export
 perstImage <- function(file, diagram, min, max, birth, image="Color", generators=TRUE, show_cc = FALSE, show_cycles=TRUE, show_bg=TRUE){
     if(image=="Color")
-        {
-          img<-readPNG(file)
-          plot(NULL, type='n', ann=FALSE, main="Persistence", xlab="x", ylab="y",xlim =range(0:dim(img)[2]),ylim = rev(range(dim(img)[1]:0)),yaxs="i",xaxs="i")
-          if(show_bg){
-              rasterImage(img, 0, dim(img)[1], dim(img)[2], 0)
-          }
+    {
+        img<-readPNG(file)
+        plot(NULL, type='n', ann=FALSE, main="Persistence", xlab="x", ylab="y",xlim =range(0:dim(img)[2]),ylim = rev(range(dim(img)[1]:0)),yaxs="i",xaxs="i")
+        if(show_bg){
+            rasterImage(img, 0, dim(img)[1], dim(img)[2], 0)
         }
+    }
 
     if(image=="Grayscale")
     { 
         img <- grayscale(load.image(file))
         plot(NULL, type='n', ann=FALSE, main="Persistence", xlab="x", ylab="y",xlim =range(0:dim(img)[1]),ylim = rev(range(dim(img)[2]:0)),yaxs="i",xaxs="i")
         if(show_bg){
-          rasterImage(img, 0, dim(img)[2], dim(img)[1], 0)
+            rasterImage(img, 0, dim(img)[2], dim(img)[1], 0)
         }
     }
 
@@ -42,8 +42,8 @@ perstImage <- function(file, diagram, min, max, birth, image="Color", generators
         }
     }
     if(show_cycles){
-      cycl <- getCycles(diagram, min, max, betti=1, birth)
-      points(cycl[[2]],cycl[[1]], col='chartreuse3', pch=19, cex=.25)
+        cycl <- getCycles(diagram, min, max, betti=1, birth)
+        points(cycl[[2]],cycl[[1]], col='chartreuse3', pch=19, cex=.25)
     }
 
     if(show_cc){
@@ -60,14 +60,14 @@ perstImage <- function(file, diagram, min, max, birth, image="Color", generators
 getCycles<-function(diag, min, max, betti, birth)
 {
 
-  if(betti==0){
+    if(betti==0){
         X<-unlist(lapply(diag$cycleLocation[which(diag$diagram[,1]==0 & diag$diagram[,3]-diag$diagram[,2]>min & diag$diagram[,3]-diag$diagram[,2]<max & diag$diagram[,2]<birth)], '[',,,1))
         Y<-unlist(lapply(diag$cycleLocation[which(diag$diagram[,1]==0 & diag$diagram[,3]-diag$diagram[,2]>min & diag$diagram[,3]-diag$diagram[,2]<max & diag$diagram[,2]<birth)], '[',,,2))
-  }
+    }
     if(betti==1){
         X<-unlist(lapply(diag$cycleLocation[which(diag$diagram[,1]==1 & diag$diagram[,3]-diag$diagram[,2]>min & diag$diagram[,3]-diag$diagram[,2]<max & diag$diagram[,2]<birth)], '[',,,1))
         Y<-unlist(lapply(diag$cycleLocation[which(diag$diagram[,1]==1 & diag$diagram[,3]-diag$diagram[,2]>min & diag$diagram[,3]-diag$diagram[,2]<max & diag$diagram[,2]<birth)], '[',,,2))
-  }
+    }
     return(list(X,Y))
 }
 
